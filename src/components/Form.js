@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Form.css";
 import Tagdropdown from "./Tagdropdown";
 import Timer from "./Timer";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const Form = () => {
-  let [seconds, minutes, hours] = [0, 0, 0];
-  const updateTime = () => {
-    setInterval(() => {
+  let timerInterval = useRef(0);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+  const [time, setTime] = useState([0, 0, 0]);
+  useEffect(() => {
+    let [seconds, minutes, hours] = [0, 0, 0];
+    const updateTime = () => {
       seconds += 1;
       if (seconds === 60) {
         seconds = 0;
@@ -17,13 +20,16 @@ const Form = () => {
         minutes = 0;
         hours += 1;
       }
-      console.clear();
       setTime([hours, minutes, seconds]);
-      console.log(hours, minutes, seconds);
-    }, 1000);
-  };
-  const [isTimerActive, setIsTimerActive] = useState(false);
-  const [time, setTime] = useState([0, 0, 0]);
+    };
+    if (isTimerActive) {
+      timerInterval.current = setInterval(updateTime, 1000);
+    } else {
+      [seconds, minutes, hours] = [0, 0, 0];
+      setTime([hours, minutes, seconds]);
+      clearInterval(timerInterval.current);
+    }
+  }, [isTimerActive]);
   return (
     <div className="Form">
       <input placeholder="What are you working on?" className="Form__input" />
@@ -36,10 +42,17 @@ const Form = () => {
         </button>
         <Timer time={time} />
         <div className="play-button-container">
-          <button className="play-button" onClick={() => updateTime()}>
+          <button
+            className="play-button"
+            onClick={() => {
+              setIsTimerActive(!isTimerActive);
+            }}
+          >
             <i
               style={{ color: "white" }}
-              className="play-icon fa-solid fa-play"
+              className={
+                isTimerActive ? "fa-solid fa-stop" : "fa-solid fa-play"
+              }
             ></i>
           </button>
         </div>
