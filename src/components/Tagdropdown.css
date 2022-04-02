@@ -43,6 +43,9 @@
   align-items: center;
 }
 .Tagdropdown__button-container {
+  text-align: left;
+  display: flex;
+  white-space: nowrap;
   width: auto;
   overflow: hidden;
 }

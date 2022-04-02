@@ -5,15 +5,17 @@ import { useState } from "react";
 const Tagdropdown = () => {
   const [options, setOptions] = useState([]);
   const [input, setInput] = useState("");
+  const [value, setValue] = useState("");
   return (
     <div className="Tagdropdown">
       <div className="Tagdropdown__search-container">
         <i className="fa-solid fa-sm fa-magnifying-glass"></i>
         <input
+          value={value}
           placeholder="Add/filter tags"
           className="Tagdropdown__search"
           onChange={(e) => {
-            setInput(e.target.value);
+            setValue(e.target.value);
           }}
         ></input>
       </div>
@@ -30,10 +32,18 @@ const Tagdropdown = () => {
         <button
           className="Tagdropdown__button"
           onClick={() => {
-            setOptions([...options, input]);
+            setOptions([...options, value]);
+            setValue("");
           }}
         >
-          <i className="fa-solid fa-plus"></i>Create Tag "{input}"
+          <i className="fa-solid fa-plus"></i>
+          Create Tag "
+          {(() => {
+            if (value.length > 10) {
+              return value.substring(0, 10) + "...";
+            } else return value;
+          })()}
+          "
         </button>
       </div>
     </div>
