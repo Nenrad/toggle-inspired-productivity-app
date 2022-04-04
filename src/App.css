@@ -4,7 +4,11 @@
   box-sizing: border-box;
 }
 
-html {
+.App {
+  height: 100%;
   background-color: #fef9f7;
+}
+html {
   height: 100vh;
+  background-color: #fef9f7;
 }
